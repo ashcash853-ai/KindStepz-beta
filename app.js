@@ -1,35 +1,3 @@
-Go ahead, Ash — paste the whole current app.js here, from the very first line to the very last line.
-
-Once you've pasted it, I'll give you one complete corrected GitHub script to replace the existing file in one go. I won't make you keep patching individual lines.
-
-Pasted text(1).txt
-Document
-
-Yes, Ash. I checked the whole script you sent, not just the bit on screen.
-
-I found the main problems: you had two different familyProgressHTML() functions, the second one used lowercase world names while your mission IDs use Think, Connect, etc., progressHTML() was being called but wasn't defined in the supplied script, and there was a lenght typo.
-
-I've rebuilt it as one complete replacement app.js so you don't need to patch individual lines again.
-
-Do this now
-Open your app.js in GitHub.
-Press Ctrl+A inside the code editor.
-Delete everything.
-Copy all of this corrected file into it.
-Commit/save the change.
-
-Download/copy the complete corrected KindStepz app.js
-
-This keeps your 30 missions, Parent Dashboard, Family Progress, KindPoints, profiles, feedback/export, accessibility controls and Supabase beta signup. I also changed the /30 counter so the special One Small Win doesn't accidentally become a 31st mission.
-
-Use this whole file rather than adding another code block underneath the old one. 
-
-kindstepz-app-fixed.js
-Code
-wont download can you not print it for me to copy
-
-Yes. Copy everything below and replace the entire contents of app.js with it.
-
 const SUPABASE_URL = "https://abducuzugbhncahlpoht.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_G96jDysFbQFNLscKK56D8g_1bk61O9Q";
 
@@ -1070,6 +1038,7 @@ function parentDashboard() {
       </button>
 
     </div>
+    $(familyProgressHTML(p)}
   `);
 }
 

@@ -5,7 +5,58 @@ const missions={Think:[['The Three-Way Plan','Pick a simple family job. Think of
 const defaultState={profiles:[],active:null,parentPin:'',settings:{large:false,contrast:false},feedback:[]};let state=JSON.parse(localStorage.getItem('kindstepz04')||'null')||structuredClone(defaultState);const app=document.querySelector('#app');
 const save=()=>{localStorage.setItem('kindstepz04',JSON.stringify(state));applySettings()};const profile=()=>state.profiles.find(p=>p.id===state.active);function applySettings(){document.body.classList.toggle('large-text',!!state.settings.large);document.body.classList.toggle('high-contrast',!!state.settings.contrast)}
 function shell(content){app.innerHTML=`<div class="wrap"><nav><button class="navbtn" onclick="home()">🌱 Home</button>${profile()?'<button class="navbtn" onclick="worldScreen()">🧭 Missions</button>':''}<button class="navbtn" onclick="parentSpace()">🔒 Parent Space</button><button class="navbtn" onclick="info()">ⓘ Info</button></nav>${content}<div class="footer">KindStepz MVP Candidate v0.4 • Small moments. Real skills. Stronger families.</div></div>`}
-function home(){let p=profile();shell(`<section class="hero"><h1 class="logo">🌱 KindStepz</h1><p class="tag">Small moments. Real skills. Stronger families.</p></section>${p?`<div class="card"><div class="profile"><div><span class="pill">Age ${p.age}</span><h2>${esc(p.nickname||'Family profile')}</h2><p>⭐ ${p.points} KindPoints • ${p.done.length}/30 missions</p></div><button class="btn primary" onclick="worldScreen()">Continue</button></div></div>${progressHTML(p)}`:`<div class="card"><h2>Start your family journey</h2><p>Choose an age route and a simple nickname. KindStepz stores progress on this device for this prototype.</p><button class="btn primary" onclick="newProfile()">Create Family Profile</button></div>`}<div class="notice"><b>Real-world first.</b> KindStepz starts positive activities away from the screen. Adults remain responsible for safety and supervision.</div>`)}
+function home(){
+  let p=profile();
+
+  if(!p){
+    shell(`
+      <section class="hero">
+        <h1 class="logo">🌱 KindStepz</h1>
+        <p class="tag">Small moments. Real skills. Stronger families.</p>
+      </section>
+
+      <div class="card">
+        <h2>Start your family journey</h2>
+        <p>Choose an age route and a simple nickname. KindStepz stores progress on this device for this prototype.</p>
+        <button class="btn primary" onclick="newProfile()">Create Family Profile</button>
+      </div>
+
+      <div class="notice">
+        <b>Real-world first.</b> KindStepz starts positive activities away from the screen. Adults remain responsible for safety and supervision.
+      </div>
+    `);
+    return;
+  }
+
+  shell(`
+    <section class="hero">
+      <h1 class="logo">🌱 KindStepz</h1>
+      <p class="tag">Small moments. Real skills. Stronger families.</p>
+    </section>
+
+    <div class="card">
+      <p>Age ${p.age}</p>
+      <h2>${esc(p.nickname||'Family')} profile</h2>
+      <p>⭐ ${p.points} KindPoints • ${p.done.length}/30 missions</p>
+    </div>
+
+    <div class="card hero">
+      <p><b>🌱 YOUR FIRST KINDSTEP</b></p>
+      <h2>One Small Win</h2>
+      <p>Choose one small useful thing to do together today.</p>
+      <p>About 5–10 minutes.</p>
+      <button class="btn primary" onclick="firstJourney()">Start One Small Win</button>
+    </div>
+
+    ${progressHTML(p)}
+
+    <button class="btn" onclick="worldScreen()">Continue to Skill Worlds</button>
+
+    <div class="notice">
+      <b>Real-world first.</b> KindStepz starts positive activities away from the screen. Adults remain responsible for safety and supervision.
+    </div>
+  `);
+}
 function firstJourney(){shell(`<div class="card hero"><h1>🌱 One Small Win</h1><p>Choose one small useful thing to do together today.</p><p>It could be preparing something, organising something, helping with a household task, or learning one simple skill.</p><div class="card"><h2>For the grown-up</h2><p>Guide, encourage and let them have a go rather than taking over.</p></div><button class="btn primary" onclick="firstJourneyReflect()">We did it</button></div>`)}
 function firstJourneyDone(){alert("🌱 Brilliant! One small win completed. KindStepz is about practising little skills together — not being perfect.");home()}
 function newProfile(){shell(`<div class="card"><h1>Create a profile</h1><label>Nickname (optional — avoid a child's full name)</label><input id="nick" class="input" maxlength="20" placeholder="e.g. Team Green"><p>Choose age route</p><div class="grid">${['4–6','7–9','10–12','13–16'].map(a=>`<button class="btn" onclick="createProfile('${a}')">${a}</button>`).join('')}</div></div>`)}

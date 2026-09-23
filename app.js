@@ -57,7 +57,7 @@ function home(){
     </div>
   `);
 }
-function firstJourney(){shell(`<div class="card hero"><h1>🌱 One Small Win</h1><p>Choose one small useful thing to do together today.</p><p>It could be preparing something, organising something, helping with a household task, or learning one simple skill.</p><div class="card"><h2>For the grown-up</h2><p>Guide, encourage and let them have a go rather than taking over.</p></div><button class="btn primary" onclick="firstJourneyReflect()">We did it</button></div>`)}
+function firstJourney(){shell(`<div class="card hero"><h1>🌱 One Small Win</h1><p>Choose one small useful thing to do together today.</p><p>It could be preparing something, organising something, helping with a household task, or learning one simple skill.</p><div class="card"><h2>For the grown-up</h2><p>Guide, encourage and let them have a go rather than taking over.</p></div><button class="btn primary" onclick="firstJourneyDone()">We did it</button></div>`)}
 function firstJourneyDone(){alert("🌱 Brilliant! One small win completed. KindStepz is about practising little skills together — not being perfect.");home()}
 function newProfile(){shell(`<div class="card"><h1>Create a profile</h1><label>Nickname (optional — avoid a child's full name)</label><input id="nick" class="input" maxlength="20" placeholder="e.g. Team Green"><p>Choose age route</p><div class="grid">${['4–6','7–9','10–12','13–16'].map(a=>`<button class="btn" onclick="createProfile('${a}')">${a}</button>`).join('')}</div></div>`)}
 function createProfile(age){let nick=document.querySelector('#nick').value.trim();let p={id:Date.now().toString(),nickname:nick,age,points:0,done:[],badges:[],reflections:[]};state.profiles.push(p);state.active=p.id;save();worldScreen()}

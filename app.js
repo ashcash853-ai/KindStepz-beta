@@ -1457,10 +1457,3 @@ async function joinBeta() {
 applySettings();
 home();
 
-This is based directly on the full app.js you supplied, including the original mission catalogue and existing local-storage structure.
-
-Important: replace the entire old file—don't paste this underneath it. Then commit it with:
-
-Stabilise KindStepz MVP and Family Progress
-
-After GitHub deploys it, don't reset your data. Refresh KindStepz first so we can see whether your existing 500 KindPoints / 5 missions survive the replacement.

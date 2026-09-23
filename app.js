@@ -74,8 +74,30 @@ function worldScreen(){let p=profile();if(!p)return home();shell(`<div class="to
 function world(w){let p=profile();shell(`<button class="back" onclick="worldScreen()">← Skill Worlds</button><div class="card"><h1>${worlds[w][0]} ${w}</h1><p>${worlds[w][1]}</p>${missions[w].map((m,i)=>{let id=w+i,d=p.done.includes(id);return `<div class="card mission"><h2>${d?'✓ ':''}${m[0]}</h2><p>${m[1]}</p><button class="btn ${d?'':'primary'}" onclick="mission('${w}',${i})">${d?'Do Again':'Start Mission'}</button></div>`}).join('')}</div>`)}
 function mission(w,i){let m=missions[w][i];shell(`<button class="back" onclick="world('${w}')">← Back</button><div class="card mission center"><div style="font-size:48px">${worlds[w][0]}</div><h1>${m[0]}</h1><p style="font-size:20px">${m[1]}</p><div class="notice">Keep it safe and age-appropriate. An adult stays responsible for food, tools, roads and outdoor activities.</div><p class="points">⭐ 100 KindPoints</p><button class="btn primary" onclick="reflect('${w}',${i})">We Finished It!</button></div>`)}
 function reflect(w,i){shell(`<div class="card center"><h1>How did it go?</h1><p>There is no failure here — reflection helps families learn.</p><div class="grid">${[['😊','Nailed it'],['🙂','We did it'],['🤔','That was tricky'],['🔄','Try again']].map(x=>`<button class="btn" onclick="finish('${w}',${i},'${x[1]}')"><div style="font-size:28px">${x[0]}</div>${x[1]}</button>`).join('')}</div></div>`)}
-function finish(w,i,reaction){let p=profile(),id=w+i,isNew=!p.done.includes(id);if(isNew){p.done.push(id);p.points+=100;if(p.done.length===1)p.badges.push('🏅 First Step');if(Object.keys(worlds).every(x=>p.done.some(d=>d.startsWith(x)))&&!p.badges.includes('🌟 Family Explorer'))p.badges.push('🌟 Family Explorer')}p.reflections.push({mission:id,reaction,date:new Date().toISOString()});save();shell(`<div class="card hero"><div style="font-size:60px">${isNew?'🏅':'🌱'}</div><h1>${isNew?'Great step!':'Mission revisited!'}</h1><p>${isNew?'You practised a real-world skill together.':'Practising again is part of learning.'}</p><h2>⭐ ${p.points} KindPoints</h2><button class="btn primary" onclick="worldScreen()">Choose Next Mission</button></div>${progressHTML(p)}`)}
-function progressHTML(p){let n=p.done.length,pc=Math.round(n/30*100);return `<div class="card"><h2>Family Journey</h2><p><b>${n}/30</b> starter missions completed</p><div class="bar"><div class="fill" style="width:${pc}%"></div></div><p>${Object.keys(worlds).map(w=>`${worlds[w][0]} ${w} ${p.done.some(d=>d.startsWith(w))?'✓':'○'}`).join(' &nbsp; ')}</p>${p.badges.map(b=>`<span class="badge">${b}</span>`).join('')}</div>`}
+function familyProgressHTML(p){
+  const counts={Think:0,Connect:0,Money:0,Life:0,Make:0,Explore:0};
+
+  (p.done||[]).forEach(id=>{
+    Object.keys(counts).forEach(w=>{
+      if(String(id).startsWith(w)) counts[w]++;
+    });
+  });
+
+  const worlds={
+    Think:"🧠 Think",
+    Connect:"❤️ Connect",
+    Money:"💷 Money",
+    Life:"🍳 Life",
+    Make:"🔧 Make",
+    Explore:"🌍 Explore"
+  };
+
+  return `<div class="card"><h2>Family Progress</h2>${
+    Object.entries(worlds)
+      .map(([w,name])=>`<div class="setting"><span><b>${name}</b></span><span>${counts[w]}/5</span></div>`)
+      .join("")
+  }</div>`;
+}function finish(w,i,reaction){let p=profile(),id=w+i,isNew=!p.done.includes(id);if(isNew){p.done.push(id);p.points+=100;if(p.done.length===1)p.badges.push('🏅 First Step');if(Object.keys(worlds).every(x=>p.done.some(d=>d.startsWith(x)))&&!p.badges.includes('🌟 Family Explorer'))p.badges.push('🌟 Family Explorer')}p.reflections.push({mission:id,reaction,date:new Date().toISOString()});save();shell(`<div class="card hero"><div style="font-size:60px">${isNew?'🏅':'🌱'}</div><h1>${isNew?'Great step!':'Mission revisited!'}</h1><p>${isNew?'You practised a real-world skill together.':'Practising again is part of learning.'}</p><h2>⭐ ${p.points} KindPoints</h2><button class="btn primary" onclick="worldScreen()">Choose Next Mission</button></div>${progressHTML(p)}`)}
 function parentSpace(){if(state.parentPin)return pinGate();shell(`<div class="card"><h1>Parent Space</h1><p>Create a 4-digit local PIN. This prototype keeps the PIN only on this device; it is not account-grade security.</p><input id="pin" class="input" inputmode="numeric" maxlength="4" placeholder="4-digit PIN"><button class="btn primary" onclick="setPin()">Set Parent PIN</button><button class="btn" onclick="parentDashboard()">Skip for prototype</button></div>`)}
 function setPin(){let v=document.querySelector('#pin').value;if(!/^\d{4}$/.test(v))return alert('Please enter exactly 4 digits.');state.parentPin=v;save();parentDashboard()}
 function pinGate(){shell(`<div class="card"><h1>Parent Space</h1><input id="pin" class="input" type="password" inputmode="numeric" maxlength="4" placeholder="PIN"><button class="btn primary" onclick="checkPin()">Unlock</button></div>`)}function checkPin(){document.querySelector('#pin').value===state.parentPin?parentDashboard():alert('PIN not recognised.')}

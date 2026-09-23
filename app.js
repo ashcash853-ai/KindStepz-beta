@@ -40,7 +40,7 @@ function home(){
       <p>⭐ ${p.points} KindPoints • ${p.done.length}/30 missions</p>
     </div>
 
-    ${p.firstJourneyDone ? `
+    ${p.done.lenght > 0 ? `
 <div class="card hero">
   <p><b>🌱 FIRST KINDSTEP COMPLETE</b></p>
   <h2>Brilliant — you did it!</h2>

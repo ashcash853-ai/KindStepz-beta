@@ -40,13 +40,22 @@ function home(){
       <p>⭐ ${p.points} KindPoints • ${p.done.length}/30 missions</p>
     </div>
 
-    <div class="card hero">
-      <p><b>🌱 YOUR FIRST KINDSTEP</b></p>
-      <h2>One Small Win</h2>
-      <p>Choose one small useful thing to do together today.</p>
-      <p>About 5–10 minutes.</p>
-      <button class="btn primary" onclick="firstJourney()">Start One Small Win</button>
-    </div>
+    ${p.firstJourneyDone ? `
+<div class="card hero">
+  <p><b>🌱 FIRST KINDSTEP COMPLETE</b></p>
+  <h2>Brilliant — you did it!</h2>
+  <p>Your family's first small win is complete.</p>
+  <button class="btn primary" onclick="worldScreen()">Choose Next Mission</button>
+</div>
+` : `
+<div class="card hero">
+  <p><b>🌱 YOUR FIRST KINDSTEP</b></p>
+  <h2>One Small Win</h2>
+  <p>Choose one small useful thing to do together today.</p>
+  <p>About 5-10 minutes.</p>
+  <button class="btn primary" onclick="firstJourney()">Start One Small Win</button>
+</div>
+`}
 
     ${progressHTML(p)}
 

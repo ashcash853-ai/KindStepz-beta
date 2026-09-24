@@ -809,9 +809,16 @@ const currentLevel = skillLevels[levelIndex];
         </b>
       </p>
       
-<p>
-  🌱 Skill Level: <b>${currentLevel}</b>
-</p>
+<div class="skill-level">
+  <div>
+    🌱 <b>Skill Level: ${currentLevel}</b>
+  </div>
+  <small>
+    ${completed < 30
+      ? `${6 - (completed % 6)} mission${6 - (completed % 6) === 1 ? '' : 's'} until the next level`
+      : `KindStepz Champion reached!`}
+  </small>
+</div>
 
       <div
         style="

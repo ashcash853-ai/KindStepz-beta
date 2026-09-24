@@ -16,6 +16,13 @@ const skillLevels = [
   'Skilled',
   'KindStepz Champion'
 ];
+function getSkillLevel(completedCount) {
+  if (completedCount >= 25) return skillLevels[4];
+  if (completedCount >= 15) return skillLevels[3];
+  if (completedCount >= 10) return skillLevels[2];
+  if (completedCount >= 5) return skillLevels[1];
+  return skillLevels[0];
+}
 const missions = {
   Think: [
     ['The Three-Way Plan', 'Pick a simple family job. Think of three ways to do it, then choose the best plan together.'],

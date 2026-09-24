@@ -1244,61 +1244,17 @@ function info() {
         through short real-world missions.
       </p>
 
-      <h2>
-        Join the KindStepz beta
-      </h2>
-
-      <p>
-        Adults can join our early-access list.
-      </p>
-
-      <label>
-        Email
-      </label>
-
-      <input
-        id="betaEmail"
-        class="input"
-        type="email"
-        placeholder="you@example.com"
-      >
-
-      <label>
-        <input
-          id="betaAdult"
-          type="checkbox"
-        >
-        I confirm I am 18 or over
-      </label>
-
-      <label>
-        <input
-          id="betaMarketing"
-          type="checkbox"
-        >
-        I would like to receive
-        KindStepz news and updates
-      </label>
-
-      <button
-        class="btn primary"
-        onclick="joinBeta()"
-      >
-        Join beta
-      </button>
-
-      <p id="betaMessage"></p>
+      
 
       <h2>
         Privacy
       </h2>
 
       <p>
-        Your family progress stays locally
-        on this device. If you choose to join
-        the beta list, your email address,
-        adult confirmation and marketing choice
-        are sent to our secure beta database.
+        Your family progress is stored locally on 
+        this device. KindStepz does not currently 
+        require an account and does not collect your 
+        family’s names, progress or mission activity.
       </p>
 
       <h2>

@@ -778,7 +778,12 @@ function progressHTML(p) {
     Math.round(
       (completed / 30) * 100
     );
+const levelIndex = Math.min(
+  Math.floor(completed / 6),
+  skillLevels.length - 1
+);
 
+const currentLevel = skillLevels[levelIndex];
   const badges =
     (p.badges || []).length
       ? `

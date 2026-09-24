@@ -9,7 +9,13 @@ const worlds = {
   Make: ['🔧', 'DIY, building & creativity'],
   Explore: ['🌍', 'Nature, community & discovery']
 };
-
+const skillLevels = [
+  'Starter',
+  'Growing',
+  'Confident',
+  'Skilled',
+  'KindStepz Champion'
+];
 const missions = {
   Think: [
     ['The Three-Way Plan', 'Pick a simple family job. Think of three ways to do it, then choose the best plan together.'],

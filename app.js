@@ -808,6 +808,10 @@ const currentLevel = skillLevels[levelIndex];
           ${completed}/30 starter missions completed
         </b>
       </p>
+      
+<p>
+  🌱 Skill Level: <b>${currentLevel}</b>
+</p>
 
       <div
         style="

@@ -1394,6 +1394,7 @@ function pinGate() {
         inputmode="numeric"
         maxlength="4"
         placeholder="PIN"
+        onkeydown="if(event.key==='Enter') checkPin()"
       >
 
       <button

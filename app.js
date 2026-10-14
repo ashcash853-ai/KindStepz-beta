@@ -614,14 +614,15 @@ function firstJourneyDone() {
 }
 
 function newProfile() {
+  if (state.profiles.length > 0 && !requireParent()) return;
   shell(`
     <div class="card">
 
       <h1>Create a profile</h1>
 
       <label>
-        Nickname
-        (optional — avoid a child's full name)
+        Nickname (optional)
+— use a family nickname, not a child's name or identifying information
       </label>
 
       <input
@@ -653,6 +654,10 @@ function newProfile() {
 }
 
 function createProfile(age) {
+ if (!state.parentPin) {
+    alert("A grown-up needs to set the Parent PIN before creating a family profile.");
+    return parentSpace();
+  }
   let nick =
     document.querySelector('#nick').value.trim();
 
@@ -1601,6 +1606,10 @@ function feedback() {
     <div class="card">
 
       <h1>Family Test Feedback</h1>
+<p>
+  Please do not include children's names, contact details
+  or other identifying information in feedback.
+</p>
 
       <label>
         Would you use KindStepz again?
@@ -1657,9 +1666,12 @@ function saveFeedback() {
   save();
   parentDashboard();
 }
-
 function exportData() {
   if (!requireParent()) return;
+
+  if (!confirm(
+    "This backup can contain family nicknames, progress and feedback. Keep the file private and only share it with someone you trust. Export now?"
+  )) return;
 
   let safe = {
     version: '0.6',

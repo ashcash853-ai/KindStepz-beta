@@ -73,7 +73,6 @@ const missions = {
   ]
 };
 
-
 // Adventure Club bonus missions.
 // Kept separate from the 30 core KindStepz missions.
 const adventureClubMissions = [
@@ -88,7 +87,6 @@ const adventureClubMissions = [
     points: 100
   }
 ];
-
 
 // Age-specific mission instructions. Indexed by original world and mission number.
 const ageMissionInstructions = {
@@ -193,10 +191,10 @@ const ageMissionInstructions = {
 
   "Life": [
     [
-      "Choose ingredients and assemble a no-cook snack with an adult.",
-      "Prepare a simple snack, practising hygiene and measuring.",
-      "Follow a simple recipe and measure ingredients safely.",
-      "Plan and prepare a nutritious snack, considering cost and food safety."
+      "Choose safe ingredients with an adult and assemble a no-cook snack. Check for allergies first.",
+      "Prepare a simple snack with an adult, practising hygiene, measuring and checking for allergies.",
+      "Follow a simple recipe safely, checking allergies and asking an adult before using knives, heat or electrical appliances.",
+      "Plan and prepare a nutritious snack, considering allergies, food safety and cost; use knives, heat or appliances only with appropriate adult supervision."
     ],
     [
       "Sort toys or safe objects into labelled containers.",
@@ -205,10 +203,10 @@ const ageMissionInstructions = {
       "Develop an efficient organisation routine and evaluate improvements."
     ],
     [
-      "Match clean clothes by colour and type.",
-      "Learn basic clothing care symbols and sort laundry.",
-      "Interpret care labels and practise washing settings with supervision.",
-      "Plan laundry loads, consider energy efficiency and practise safe machine operation."
+      "Match clean clothes by colour and type with an adult.",
+      "Learn basic clothing care symbols and sort laundry with an adult.",
+      "Interpret care labels and explore washing settings with adult supervision.",
+      "Plan laundry loads and consider energy efficiency; only operate washing machines with appropriate adult permission or supervision."
     ],
     [
       "Choose picture cards for breakfast, lunch and dinner.",
@@ -226,10 +224,10 @@ const ageMissionInstructions = {
 
   "Make": [
     [
-      "Identify something that needs tidying or adjusting with an adult.",
-      "Investigate a simple household problem and suggest safe solutions.",
-      "Identify a simple maintenance problem and plan a safe solution.",
-      "Evaluate a household maintenance task, materials and safety requirements; do not attempt hazardous repairs."
+      "Identify something safe that needs tidying or adjusting with an adult. Do not use tools.",
+      "Investigate a simple household problem with an adult and suggest safe solutions. Do not attempt electrical, gas or structural repairs.",
+      "Identify a simple maintenance problem and plan a safe solution with an adult; only use age-appropriate tools with permission and supervision.",
+      "Evaluate a household maintenance task, materials and safety requirements. Leave electrical, gas, structural or other hazardous repairs to a responsible adult or qualified professional."
     ],
     [
       "Build a tower using paper and folding.",
@@ -313,6 +311,7 @@ function missionInstructions(w, i) {
   return (route >= 0 && instructions?.[route]) ||
     missions[w][i][1];
 }
+
 const defaultState = {
   profiles: [],
   active: null,
@@ -329,6 +328,7 @@ let state =
   structuredClone(defaultState);
 
 const app = document.querySelector('#app');
+
 let parentUnlocked = false;
 
 function requireParent() {
@@ -336,9 +336,9 @@ function requireParent() {
     parentSpace();
     return false;
   }
+
   return true;
 }
-
 const save = () => {
   localStorage.setItem('kindstepz04', JSON.stringify(state));
   applySettings();
@@ -410,6 +410,7 @@ function home() {
     shell(`
       <section class="hero">
         <h1 class="logo">🌱 KindStepz</h1>
+
         <p class="tag">
           Small moments. Real skills. Stronger families.
         </p>
@@ -567,12 +568,14 @@ function firstJourney() {
       </p>
 
       <div class="card">
+
         <h2>For the grown-up</h2>
 
         <p>
           Guide, encourage and let them have a go
           rather than taking over.
         </p>
+
       </div>
 
       <button
@@ -614,15 +617,14 @@ function firstJourneyDone() {
 }
 
 function newProfile() {
-  if (state.profiles.length > 0 && !requireParent()) return;
   shell(`
     <div class="card">
 
       <h1>Create a profile</h1>
 
       <label>
-        Nickname (optional)
-— use a family nickname, not a child's name or identifying information
+        Nickname
+        (optional — avoid a child's full name)
       </label>
 
       <input
@@ -654,10 +656,6 @@ function newProfile() {
 }
 
 function createProfile(age) {
- if (!state.parentPin) {
-    alert("A grown-up needs to set the Parent PIN before creating a family profile.");
-    return parentSpace();
-  }
   let nick =
     document.querySelector('#nick').value.trim();
 
@@ -692,6 +690,7 @@ function worldScreen() {
     <div class="top">
 
       <div>
+
         <span class="pill">
           ${esc(p.nickname || 'Family')}
           • Age ${p.age}
@@ -700,6 +699,7 @@ function worldScreen() {
         <h1>
           Choose a Skill World
         </h1>
+
       </div>
 
       <strong>
@@ -717,6 +717,7 @@ function worldScreen() {
               class="btn world"
               onclick="world('${w}')"
             >
+
               <div style="font-size:30px">
                 ${x[0]}
               </div>
@@ -726,6 +727,7 @@ function worldScreen() {
               <div class="small">
                 ${x[1]}
               </div>
+
             </button>
           `)
           .join('')
@@ -854,12 +856,11 @@ function finishAdventureClubMission(i) {
 
   if (!p || !m) return home();
 
-  if (!Array.isArray(p.adventureDone)) {
+  if (!p.adventureDone) {
     p.adventureDone = [];
   }
 
-  const isNew =
-    !p.adventureDone.includes(m.id);
+  const isNew = !p.adventureDone.includes(m.id);
 
   if (isNew) {
     p.adventureDone.push(m.id);
@@ -938,7 +939,6 @@ function world(w) {
       ${
         missions[w]
           .map((m, i) => {
-
             let id = w + i;
             let d = p.done.includes(id);
 
@@ -1103,11 +1103,9 @@ function finish(w, i, reaction) {
   const completed = missionCount(p);
 
   const milestone =
-    isNew &&
-    [5, 10, 15, 25, 30].includes(completed);
+    isNew && [5, 10, 15, 25, 30].includes(completed);
 
-  const level =
-    getSkillLevel(completed);
+  const level = getSkillLevel(completed);
 
   save();
 
@@ -1166,17 +1164,11 @@ function familyProgressHTML(p) {
   };
 
   (p.done || []).forEach(id => {
-
     Object.keys(counts).forEach(w => {
-
-      if (
-        String(id).startsWith(w)
-      ) {
+      if (String(id).startsWith(w)) {
         counts[w]++;
       }
-
     });
-
   });
 
   const labels = {
@@ -1223,16 +1215,13 @@ function familyProgressHTML(p) {
 }
 
 function progressHTML(p) {
-  const completed =
-    missionCount(p);
+  const completed = missionCount(p);
 
-  const percent =
-    Math.round(
-      (completed / 30) * 100
-    );
+  const percent = Math.round(
+    (completed / 30) * 100
+  );
 
-  const currentLevel =
-    getSkillLevel(completed);
+  const currentLevel = getSkillLevel(completed);
 
   const badges =
     (p.badges || []).length
@@ -1261,7 +1250,6 @@ function progressHTML(p) {
       </p>
 
       <div class="skill-level">
-
         <div>
           🌱 <b>Skill Level: ${currentLevel}</b>
         </div>
@@ -1280,10 +1268,9 @@ function progressHTML(p) {
                           ? 25 - completed
                           : 30 - completed
                 } mission(s) until the next milestone`
-              : `KindStepz Champion reached!`
+              : 'KindStepz Champion reached!'
           }
         </small>
-
       </div>
 
       <div
@@ -1311,7 +1298,6 @@ function progressHTML(p) {
     ${badges}
   `;
 }
-
 function parentSpace() {
   parentUnlocked = false;
 
@@ -1322,9 +1308,7 @@ function parentSpace() {
   shell(`
     <div class="card">
 
-      <h1>
-        Parent Space
-      </h1>
+      <h1>Parent Space</h1>
 
       <p>
         Create a 4-digit local PIN.
@@ -1333,9 +1317,7 @@ function parentSpace() {
         account-grade security.
       </p>
 
-      <label for="pin">
-        Parent PIN
-      </label>
+      <label for="pin">Parent PIN</label>
 
       <input
         id="pin"
@@ -1345,6 +1327,7 @@ function parentSpace() {
         maxlength="4"
         autocomplete="off"
         placeholder="4-digit PIN"
+        onkeydown="if(event.key === 'Enter') setPin()"
       >
 
       <button
@@ -1359,13 +1342,10 @@ function parentSpace() {
 }
 
 function setPin() {
-  let v =
-    document.querySelector('#pin').value;
+  const v = document.querySelector('#pin').value;
 
   if (!/^\d{4}$/.test(v)) {
-    return alert(
-      'Please enter exactly 4 digits.'
-    );
+    return alert('Please enter exactly 4 digits.');
   }
 
   state.parentPin = v;
@@ -1379,13 +1359,9 @@ function pinGate() {
   shell(`
     <div class="card">
 
-      <h1>
-        Parent Space
-      </h1>
+      <h1>Parent Space</h1>
 
-      <label for="pin">
-        Parent PIN
-      </label>
+      <label for="pin">Parent PIN</label>
 
       <input
         id="pin"
@@ -1393,8 +1369,9 @@ function pinGate() {
         type="password"
         inputmode="numeric"
         maxlength="4"
+        autocomplete="off"
         placeholder="PIN"
-        onkeydown="if(event.key==='Enter') checkPin()"
+        onkeydown="if(event.key === 'Enter') checkPin()"
       >
 
       <button
@@ -1409,17 +1386,20 @@ function pinGate() {
 }
 
 function checkPin() {
-  document.querySelector('#pin').value ===
-  state.parentPin
-    ? (
-        parentUnlocked = true,
-        parentDashboard()
-      )
-    : alert('PIN not recognised.');
+  const entered = document.querySelector('#pin').value;
+
+  if (entered === state.parentPin) {
+    parentUnlocked = true;
+    parentDashboard();
+  } else {
+    alert('PIN not recognised.');
+  }
 }
+
 function parentDashboard() {
   if (!requireParent()) return;
-  let p = profile();
+
+  const p = profile();
 
   if (!p) {
     return home();
@@ -1453,6 +1433,7 @@ function parentDashboard() {
       <h2>Accessibility</h2>
 
       <div class="setting">
+
         <span>Larger text</span>
 
         <button
@@ -1461,9 +1442,11 @@ function parentDashboard() {
         >
           ${state.settings.large ? 'On' : 'Off'}
         </button>
+
       </div>
 
       <div class="setting">
+
         <span>High contrast</span>
 
         <button
@@ -1472,13 +1455,14 @@ function parentDashboard() {
         >
           ${state.settings.contrast ? 'On' : 'Off'}
         </button>
+
       </div>
 
     </div>
 
     <div class="card">
 
-      <h2>Testing & data</h2>
+      <h2>Testing &amp; data</h2>
 
       <p>
         Export contains local prototype
@@ -1534,15 +1518,13 @@ function parentDashboard() {
       </button>
 
     </div>
-
-      `);
+  `);
 }
 
 function toggleSetting(k) {
   if (!requireParent()) return;
 
-  state.settings[k] =
-    !state.settings[k];
+  state.settings[k] = !state.settings[k];
 
   save();
   parentDashboard();
@@ -1575,8 +1557,7 @@ function switchProfile() {
 
             </div>
           `)
-          .join('') ||
-        '<p>No profiles yet.</p>'
+          .join('') || '<p>No profiles yet.</p>'
       }
 
       <button
@@ -1598,7 +1579,6 @@ function activate(id) {
   save();
   parentDashboard();
 }
-
 function feedback() {
   if (!requireParent()) return;
 
@@ -1606,10 +1586,6 @@ function feedback() {
     <div class="card">
 
       <h1>Family Test Feedback</h1>
-<p>
-  Please do not include children's names, contact details
-  or other identifying information in feedback.
-</p>
 
       <label>
         Would you use KindStepz again?
@@ -1666,16 +1642,18 @@ function saveFeedback() {
   save();
   parentDashboard();
 }
+
 function exportData() {
   if (!requireParent()) return;
 
-  if (!confirm(
-    "This backup can contain family nicknames, progress and feedback. Keep the file private and only share it with someone you trust. Export now?"
-  )) return;
+  const ok = confirm(
+    "This backup may contain family nicknames, progress and feedback stored on this device. Keep it private and review it before sharing.\n\nDownload your KindStepz backup now?"
+  );
 
-  let safe = {
+  if (!ok) return;
+
+  const safe = {
     version: '0.6',
-
     exported:
       new Date().toISOString(),
 
@@ -1691,7 +1669,7 @@ function exportData() {
       state.feedback
   };
 
-  let b = new Blob(
+  const b = new Blob(
     [
       JSON.stringify(
         safe,
@@ -1704,7 +1682,7 @@ function exportData() {
     }
   );
 
-  let a =
+  const a =
     document.createElement('a');
 
   a.href =
@@ -1725,6 +1703,7 @@ function chooseRestoreFile() {
     .querySelector('#restore-file')
     .click();
 }
+
 async function restoreDataFile(input) {
   if (!requireParent()) return;
 
@@ -1734,11 +1713,8 @@ async function restoreDataFile(input) {
   if (!file) return;
 
   try {
-
     if (file.size > 1024 * 1024) {
-      throw new Error(
-        'Backup is too large.'
-      );
+      throw new Error('Backup is too large.');
     }
 
     const data =
@@ -1746,118 +1722,69 @@ async function restoreDataFile(input) {
 
     if (
       !data ||
-      !['0.4', '0.5', '0.6']
-        .includes(String(data.version)) ||
+      !['0.4', '0.5', '0.6'].includes(String(data.version)) ||
       !Array.isArray(data.profiles) ||
       data.profiles.length > 100 ||
       !Array.isArray(data.feedback || [])
     ) {
-      throw new Error(
-        'Unsupported backup format.'
-      );
+      throw new Error('Unsupported backup format.');
     }
 
     const allowed =
       new Set(
-        Object.keys(missions)
-          .flatMap(w =>
-            missions[w].map(
-              (_, i) => w + i
-            )
-          )
+        Object.keys(missions).flatMap(w =>
+          missions[w].map((_, i) => w + i)
+        )
       );
 
     const allowedAdventure =
       new Set(
-        adventureClubMissions.map(
-          m => m.id
-        )
+        adventureClubMissions.map(m => m.id)
       );
 
     const restored =
       data.profiles.map((p, i) => {
-
-        if (
-          !p ||
-          typeof p !== 'object'
-        ) {
-          throw new Error(
-            'Invalid profile data.'
-          );
-        }
-
-        /*
-          Older KindStepz backups do not have
-          Adventure Club progress.
-
-          Treat that as an empty Adventure Club
-          history so old backups still work.
-        */
         const adventureDone =
-          Array.isArray(p.adventureDone)
+          Array.isArray(p?.adventureDone)
             ? p.adventureDone
             : [];
 
         if (
-          !['4–6', '7–9', '10–12', '13–16']
-            .includes(p.age) ||
-
+          !p ||
+          typeof p !== 'object' ||
+          !['4–6', '7–9', '10–12', '13–16'].includes(p.age) ||
           typeof p.nickname !== 'string' ||
           p.nickname.length > 20 ||
-
           !Number.isSafeInteger(p.points) ||
           p.points < 0 ||
-
           !Array.isArray(p.done) ||
           p.done.length > 31 ||
-
           !p.done.every(
             d =>
               d === 'firstJourney' ||
               allowed.has(d)
           ) ||
-
-          new Set(p.done).size !==
-            p.done.length ||
-
-          adventureDone.length >
-            adventureClubMissions.length ||
-
-          !adventureDone.every(
-            id => allowedAdventure.has(id)
+          new Set(p.done).size !== p.done.length ||
+          adventureDone.length > adventureClubMissions.length ||
+          !adventureDone.every(id =>
+            allowedAdventure.has(id)
           ) ||
-
-          new Set(adventureDone).size !==
-            adventureDone.length ||
-
+          new Set(adventureDone).size !== adventureDone.length ||
           !Array.isArray(p.badges) ||
-
           !p.badges.every(
             b =>
               typeof b === 'string' &&
               b.length < 100
           ) ||
-
           !Array.isArray(p.reflections) ||
-
           p.reflections.length > 10000
         ) {
-          throw new Error(
-            'Invalid profile data.'
-          );
+          throw new Error('Invalid profile data.');
         }
 
-        /*
-          Core KindStepz activities are worth
-          100 points each.
-
-          Adventure Club points are calculated
-          separately from the bonus missions.
-        */
         const adventurePoints =
           adventureDone.reduce(
             (total, id) => {
-
               const mission =
                 adventureClubMissions.find(
                   m => m.id === id
@@ -1870,7 +1797,7 @@ async function restoreDataFile(input) {
           );
 
         const expected =
-          (p.done.length * 100) +
+          p.done.length * 100 +
           adventurePoints;
 
         if (p.points !== expected) {
@@ -1886,31 +1813,27 @@ async function restoreDataFile(input) {
             '-' +
             i,
 
-          nickname:
-            p.nickname,
-
-          age:
-            p.age,
-
-          points:
-            p.points,
+          nickname: p.nickname,
+          age: p.age,
+          points: p.points,
 
           done:
             [...p.done],
 
-          adventureDone:
-            [...adventureDone],
-
           badges:
             [...p.badges],
 
+          adventureDone:
+            [...adventureDone],
+
           reflections:
             p.reflections
-              .filter(r =>
-                r &&
-                typeof r.mission === 'string' &&
-                typeof r.reaction === 'string' &&
-                typeof r.date === 'string'
+              .filter(
+                r =>
+                  r &&
+                  typeof r.mission === 'string' &&
+                  typeof r.reaction === 'string' &&
+                  typeof r.date === 'string'
               )
               .map(r => ({
                 mission:
@@ -1929,53 +1852,36 @@ async function restoreDataFile(input) {
         };
       });
 
-    /*
-      Adventure Club completion is part of the
-      profile signature.
-
-      This stops a restored profile with different
-      Adventure Club progress being mistaken for
-      an identical profile.
-    */
     const profileSignature =
-      p => JSON.stringify({
+      p =>
+        JSON.stringify({
+          nickname: p.nickname,
+          age: p.age,
+          points: p.points,
 
-        nickname:
-          p.nickname,
+          done:
+            [...p.done].sort(),
 
-        age:
-          p.age,
+          badges:
+            [...p.badges].sort(),
 
-        points:
-          p.points,
+          adventureDone:
+            [...(p.adventureDone || [])].sort(),
 
-        done:
-          [...p.done].sort(),
+          reflections:
+            p.reflections,
 
-        adventureDone:
-          [...(p.adventureDone || [])]
-            .sort(),
-
-        badges:
-          [...p.badges].sort(),
-
-        reflections:
-          p.reflections,
-
-        firstJourneyDone:
-          !!p.firstJourneyDone
-      });
+          firstJourneyDone:
+            !!p.firstJourneyDone
+        });
 
     const existingSignatures =
       new Set(
-        state.profiles.map(
-          profileSignature
-        )
+        state.profiles.map(profileSignature)
       );
 
     const newProfiles =
       restored.filter(p => {
-
         const signature =
           profileSignature(p);
 
@@ -1986,14 +1892,13 @@ async function restoreDataFile(input) {
         }
 
         existingSignatures.add(signature);
-
         return true;
       });
 
     const existingFeedback =
       new Set(
-        state.feedback.map(
-          f => JSON.stringify({
+        state.feedback.map(f =>
+          JSON.stringify({
             again: f.again,
             note: f.note,
             date: f.date
@@ -2003,26 +1908,20 @@ async function restoreDataFile(input) {
 
     const newFeedback =
       data.feedback
-        .filter(f =>
-          f &&
-          ['Yes', 'Maybe', 'No']
-            .includes(f.again) &&
-          typeof f.note === 'string' &&
-          f.note.length <= 500 &&
-          typeof f.date === 'string'
+        .filter(
+          f =>
+            f &&
+            ['Yes', 'Maybe', 'No'].includes(f.again) &&
+            typeof f.note === 'string' &&
+            f.note.length <= 500 &&
+            typeof f.date === 'string'
         )
         .map(f => ({
-          again:
-            f.again,
-
-          note:
-            f.note,
-
-          date:
-            f.date.slice(0, 50)
+          again: f.again,
+          note: f.note,
+          date: f.date.slice(0, 50)
         }))
         .filter(f => {
-
           const signature =
             JSON.stringify(f);
 
@@ -2033,7 +1932,6 @@ async function restoreDataFile(input) {
           }
 
           existingFeedback.add(signature);
-
           return true;
         });
 
@@ -2060,7 +1958,6 @@ async function restoreDataFile(input) {
       structuredClone(state);
 
     try {
-
       state.profiles.push(
         ...newProfiles
       );
@@ -2070,11 +1967,8 @@ async function restoreDataFile(input) {
       );
 
       save();
-
     } catch (err) {
-
       state = previous;
-
       throw err;
     }
 
@@ -2085,14 +1979,12 @@ async function restoreDataFile(input) {
     parentDashboard();
 
   } catch (err) {
-
     alert(
       'Restore cancelled: ' +
       err.message
     );
 
   } finally {
-
     input.value = '';
   }
 }
@@ -2104,14 +1996,9 @@ function resetAll() {
       'Erase all KindStepz data stored in this browser?'
     )
   ) {
+    localStorage.removeItem('kindstepz04');
 
-    localStorage.removeItem(
-      'kindstepz04'
-    );
-
-    state =
-      structuredClone(defaultState);
-
+    state = structuredClone(defaultState);
     parentUnlocked = false;
 
     applySettings();
@@ -2125,9 +2012,7 @@ function info() {
   shell(`
     <div class="card">
 
-      <h1>
-        About KindStepz
-      </h1>
+      <h1>About KindStepz</h1>
 
       <p>
         KindStepz is a prototype designed
@@ -2136,36 +2021,44 @@ function info() {
         through short real-world missions.
       </p>
 
-      <h2>
-        Privacy
-      </h2>
+      <h2>Privacy</h2>
 
       <p>
-        Your family progress is stored locally on
-        this device. KindStepz does not currently
-        require an account and does not collect your
-        family’s names, progress or mission activity.
+        Your family progress is stored locally
+        on this device.
+
+        KindStepz does not require an account
+        and does not collect your family's names,
+        progress or mission activity.
       </p>
 
-      <h2>
-        Parent information
-      </h2>
+      <h2>Parent information</h2>
 
       <p>
         KindStepz is not medical, therapeutic,
         financial or professional safety advice.
+
         Adults choose whether an activity is suitable
         and supervise as needed.
       </p>
 
-      <h2>
-        Testing rule
-      </h2>
+      <h2>Testing rule</h2>
 
       <p>
         Please avoid entering children's full names
         or identifying information.
+
         Use a nickname if you want to label a profile.
+      </p>
+
+      <h2>Adventure Club</h2>
+
+      <p>
+        The 15-Minute Adventure Club offers
+        optional real-world family missions.
+
+        These bonus adventures are separate
+        from the 30 core KindStepz missions.
       </p>
 
     </div>
@@ -2184,6 +2077,5 @@ function esc(s) {
     }[c])
   );
 }
-
 applySettings();
 home();

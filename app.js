@@ -1535,8 +1535,7 @@ function parentDashboard() {
 
     </div>
 
-    ${familyProgressHTML(p)}
-  `);
+      `);
 }
 
 function toggleSetting(k) {

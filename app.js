@@ -386,7 +386,7 @@ function shell(content) {
       ${content}
 
       <div class="footer">
-        KindStepz MVP Candidate v0.6 •
+        KindStepz MVP candidate v0.8 •
         Small moments. Real skills. Stronger families.
       </div>
 
